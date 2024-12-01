@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Breast Cancer Prediction</title>
+    <link rel="stylesheet" href="static/css/home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="static/js/app.js" defer></script> 
+    
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1>Welcome to the Breast Cancer Prediction Tool</h1>
+            <p>Utilizing advanced machine learning algorithms for breast cancer detection.</p>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            <section class="introduction-section">
+                <h2>Introduction</h2>
+                <p>This tool leverages machine learning techniques including Logistic Regression, Decision Trees, and Random Forests to predict breast cancer based on various input parameters.</p>
+                <button id="loginBtn">Login</button>
+                <button id="signupBtn">Signup</button>
+            </section>
+
+            <section class="image-section">
+                <h2>Why Early Detection Matters</h2>
+                <img src="./bct.jpg" alt="Breast Cancer Awareness" class="responsive-image">
+                <img src="./bct2.jpg" alt="Breast Cancer Awareness" class="responsive-image">
+                <p>Early detection of breast cancer is crucial for several reasons:</p>
+                <div class="reasons-list">
+                    <div class="reason-item">
+                        <strong>1. Increased Survival Rates:</strong>
+                        <p>When breast cancer is detected early, the chances of successful treatment and survival significantly increase. Many studies show that early-stage detection (Stage 0 or I) can lead to a survival rate of over 90%.</p>
+                    </div>
+                    <div class="reason-item">
+                        <strong>2. Less Aggressive Treatment:</strong>
+                        <p>Early-stage breast cancer often requires less aggressive treatment compared to later stages. This can mean fewer side effects and a better quality of life during and after treatment.</p>
+                    </div>
+                    <div class="reason-item">
+                        <strong>3. Improved Treatment Options:</strong>
+                        <p>Early detection allows for a broader range of treatment options. Patients may have the opportunity to choose from various therapies, including lumpectomy, radiation, or targeted therapies.</p>
+                    </div>
+                    <div class="reason-item">
+                        <strong>4. Awareness and Education:</strong>
+                        <p>Regular screenings and self-examinations promote awareness about breast cancer. Understanding the signs and symptoms can empower individuals to seek medical advice promptly.</p>
+                    </div>
+                    <div class="reason-item">
+                        <strong>5. Cost-Effectiveness:</strong>
+                        <p>Detecting cancer at an early stage can lead to lower overall treatment costs. Advanced-stage treatments are typically more intensive and expensive, leading to a higher financial burden.</p>
+                    </div>
+                    <div class="reason-item">
+                        <strong>6. Emotional Well-Being:</strong>
+                        <p>Knowing that cancer is detected early can provide peace of mind to patients and their families, reducing anxiety about the disease.</p>
+                    </div>
+                </div>
+                <p>By prioritizing early detection through regular screenings, such as mammograms and self-exams, individuals can take proactive steps in the fight against breast cancer, enhancing their chances for a positive outcome.</p>
+            
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; Created by Pritish Rani Karn & Niru Thapa</p>
+    </footer>
+    
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeLoginModal">&times;</span>
+            <h2>Login</h2>
+            <label for="loginUsername">Username:</label>
+            <input type="text" id="loginUsername" placeholder="Enter username">
+            <label for="loginPassword">Password:</label>
+            <input type="password" id="loginPassword" placeholder="Enter password">
+            <button id="submitLogin">Login</button>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeSignupModal">&times;</span>
+            <h2>Signup</h2>
+            <label for="signupUsername">Username:</label>
+            <input type="text" id="signupUsername" placeholder="Enter new username">
+            <label for="signupPassword">Password:</label>
+            <input type="password" id="signupPassword" placeholder="Enter new password">
+            <button id="submitSignup">Signup</button>
+        </div>
+    </div>
+
+    <script>
+    // Get modals
+    const loginModal = document.getElementById("loginModal");
+    const signupModal = document.getElementById("signupModal");
+
+    // Get buttons
+    const loginBtn = document.getElementById("loginBtn");
+    const signupBtn = document.getElementById("signupBtn");
+
+    // Get close buttons
+    const closeLoginModal = document.getElementById("closeLoginModal");
+    const closeSignupModal = document.getElementById("closeSignupModal");
+
+    // Open login modal
+    loginBtn.onclick = function() {
+        loginModal.style.display = "block";
+    }
+
+    // Open signup modal
+    signupBtn.onclick = function() {
+        signupModal.style.display = "block";
+    }
+
+    // Close login modal
+    closeLoginModal.onclick = function() {
+        loginModal.style.display = "none";
+    }
+
+    // Close signup modal
+    closeSignupModal.onclick = function() {
+        signupModal.style.display = "none";
+    }
+
+    // Close modal when clicking outside of it
+    window.onclick = function(event) {
+        if (event.target == loginModal) {
+            loginModal.style.display = "none";
+        } else if (event.target == signupModal) {
+            signupModal.style.display = "none";
+        }
+    }
+
+    // Handle login submission
+    document.getElementById('submitLogin').addEventListener('click', function() {
+        const username = document.getElementById("loginUsername").value;
+        const password = document.getElementById("loginPassword").value;
+
+        if (!username || !password) {
+            alert("Username and password cannot be empty.");
+            return;
+        }
+
+        fetch('http://127.0.0.1:5000/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("Login successful!");
+                window.location.href = "index.html"; // Redirect to another page after successful login
+            } else {
+                alert("Invalid credentials.");
+            }
+        })
+        .catch(error => {
+            console.error('Error during login:', error);
+            alert("An error occurred during login.");
+        });
+
+        loginModal.style.display = "none"; // Close modal after submission
+    });
+
+    // Handle signup submission
+    document.getElementById('submitSignup').addEventListener('click', function() {
+        const username = document.getElementById("signupUsername").value;
+        const password = document.getElementById("signupPassword").value;
+
+        if (!username || !password) {
+            alert("Username and password cannot be empty.");
+            return;
+        }
+
+        fetch('http://127.0.0.1:5000/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        })
+        .then(response => {
+            if (response.ok) {
+                alert("Signup successful! You can now login.");
+            } else {
+                alert("Signup failed. Username may already exist.");
+            }
+        })
+        .catch(error => {
+            console.error('Error during signup:', error);
+            alert("An error occurred during signup.");
+        });
+
+        signupModal.style.display = "none"; // Close modal after submission
+    });
+    </script>
+</body>
+</html>
